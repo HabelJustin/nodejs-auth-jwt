@@ -21,12 +21,12 @@ app.use(express.urlencoded({ extended: true })); // for parsing application/x-ww
 app.use("/", require("./routes"));
 
 // database connection
-const dbURI = `mongodb://${process.env.mLabUser}:${process.env.mLabPassword}@ds159274.mlab.com:59274/shaun-nodejs-jwt`;
+const dbURI = process.env.mongodbURI;
 const PORT = process.env.PORT || 3000;
 mongoose
 	.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 	.catch((err) => console.log(err));
 
-mongoose.connection.once("open", () => console.log("Connected to database! @mLab"));
+mongoose.connection.once("open", () => console.log("Connected to database!"));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
