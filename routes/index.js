@@ -1,7 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { signUp_GET, signUp_POST, login_GET, login_POST } = require("../controllers/authController");
-const requireAuth = require("../middleware/authMiddleware");
+const { signUp_GET, signUp_POST, login_GET, login_POST, logout_GET } = require("../controllers/authController");
+const { requireAuth, checkUser } = require("../middleware/authMiddleware");
+
+// @GET
+// @Desc - check current user (if any)
+router.get("*", checkUser);
 
 // @GET
 // @Desc - display Homepage
@@ -22,6 +26,10 @@ router.get("/login", login_GET);
 // @POST
 // @Desc - logging user
 router.post("/login", login_POST);
+
+// @GET
+// @Desc - logout current user
+router.get("/logout", logout_GET);
 
 // @POST
 // @Desc - display Smoothies

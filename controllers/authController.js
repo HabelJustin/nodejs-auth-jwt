@@ -77,10 +77,17 @@ const login_POST = async (req, res) => {
 	}
 };
 
+const logout_GET = (req, res) => {
+	res.cookie("jwt", "");
+	res.cookie("redirectTo", "");
+	res.redirect("/");
+};
+
 module.exports = {
 	signUp_GET,
 	signUp_POST,
 	login_GET,
 	login_POST,
+	logout_GET,
 	handleErrors,
 };
