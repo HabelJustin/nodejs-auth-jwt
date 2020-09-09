@@ -4,29 +4,46 @@
 	<h2>Sign up</h2>
 	<label for="email">Email</label>
 	<input type="text" name="email" required />
-	<div class="email error"></div>
+	<div id="error-email" class="email error"></div>
 	<label for="password">Password</label>
 	<input type="password" name="password" required />
-	<div class="password error"></div>
+	<div id="error-password" class="password error"></div>
 	<button>Sign up</button>
 </form>
 
 <%- include('partials/footer'); -%>
 
 <script>
+	const emailEl = document.getElementById("error-email");
+	const passwordEl = document.getElementById("error-password");
+
+	document.querySelector('input[name="email"]').addEventListener("keypress", () => (emailEl.textContent = ""));
+	document.querySelector('input[name="password"]').addEventListener("keypress", () => (passwordEl.textContent = ""));
 	const form = document.querySelector("form");
 	form.addEventListener("submit", async (e) => {
 		e.preventDefault();
+
 		// get values
 		const email = form.email.value;
 		const password = form.password.value;
-
 		try {
 			const res = await fetch("/signup", {
 				method: "POST",
 				body: JSON.stringify({ email, password }),
 				headers: { "Content-Type": "application/json" },
 			});
+			const data = await res.json();
+			if (data.errors) {
+				if (data.errors.email) {
+					emailEl.textContent = data.errors.email;
+				}
+				if (data.errors.password) {
+					passwordEl.textContent = data.errors.password;
+				}
+			}
+			if (data.user) {
+				location.assign("/");
+			}
 		} catch (err) {
 			console.log(err);
 		}

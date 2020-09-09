@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { signUp_GET, signUp_POST, login_GET, login_POST } = require("../controllers/authController");
+const requireAuth = require("../middleware/authMiddleware");
 
 // @GET
 // @Desc - display Homepage
@@ -24,6 +25,8 @@ router.post("/login", login_POST);
 
 // @POST
 // @Desc - display Smoothies
-router.get("/smoothies", (req, res) => res.render("smoothies"));
+router.get("/smoothies", requireAuth, (req, res) => {
+	res.render("smoothies");
+});
 
 module.exports = router;
